@@ -1,16 +1,15 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import Any
-
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from piccolo_api.csrf.middleware import CSRFMiddleware
 from sqlalchemy.ext.asyncio import (
-	create_async_engine,
-	AsyncSession, async_sessionmaker
+    create_async_engine,
+    AsyncSession, async_sessionmaker
 )
 from sqlmodel import SQLModel
+from typing import Any
 
 from checkbox_api.config import POSTGRES_CONFIG, APP_CONFIG, RunModes
 from checkbox_api.features.receipt.api.router import router as receipt_router
@@ -53,7 +52,7 @@ async def app_lifespan(
 
 app = CheckBoxFastAPI(lifespan=app_lifespan)
 
-app_router = APIRouter(prefix='/api/v1/')
+app_router = APIRouter(prefix='/api/v1')
 
 app_router.include_router(
     router=receipt_router

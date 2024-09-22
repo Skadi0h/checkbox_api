@@ -14,7 +14,7 @@ router = fastapi.APIRouter(
 
 @cbv(router)
 class ReceiptAPI:
-    receipt_handler: ReceiptHandlerDependency
+    #receipt_handler: ReceiptHandlerDependency
 
     @router.post('/')
     async def create_receipt(
@@ -37,5 +37,5 @@ class ReceiptAPI:
         )
 
     @router.get('/{receipt_id:uuid}')
-    async def get_receipt_by_id(self, *, receipt_id: Annotated[uuid.UUID, fastapi.Query()]) -> ReceiptOutput:
+    async def get_receipt_by_id(self, *, receipt_id: Annotated[uuid.UUID, fastapi.Path()]) -> ReceiptOutput:
         return await self.receipt_handler.get_receipt_by_id(receipt_id=receipt_id)

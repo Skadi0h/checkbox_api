@@ -1,10 +1,10 @@
-from typing import Generic, List
+from typing import Generic, TypeVar
 
 from pydantic import BaseModel, Field
 from pydantic.v1.generics import GenericModel
 from sqlmodel.sql._expression_select_cls import SelectOfScalar, Select
 
-from checkbox_api.generics.type_vars import ModelTypeT
+T = TypeVar('T')
 
 
 class PageParams(BaseModel):
@@ -12,11 +12,11 @@ class PageParams(BaseModel):
     size: int = Field(gt=1, default=10)
 
 
-class PagedModelResponse(GenericModel, Generic[ModelTypeT]):
+class PagedModelResponse(GenericModel, Generic[T]):
     total: int
     page: int
     size: int
-    results: List[ModelTypeT]
+    results: list[T]
 
 
 async def paginate_query(

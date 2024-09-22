@@ -37,7 +37,7 @@ class PostgreSQLConfig(BaseSettings):
             password=self.db_user_password,
             host=self.db_host,
             port=self.db_port,
-            fragment=self.db_name
+            
         )
 
 
