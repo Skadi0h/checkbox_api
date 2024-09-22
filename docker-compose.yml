@@ -1,0 +1,33 @@
+services:
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/checkbox_api
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PG_DB_USER_NAME=user
+      - PG_DB_USER_PASSWORD=password
+      - PG_DB_HOST=postgres
+      - PG_DB_PORT=5432
+      - PG_DB_NAME=checkbox
+    depends_on:
+      - postgres
+
+
+  postgres:
+    image: postgres:16.4
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: checkbox
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+    driver: local

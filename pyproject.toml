@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "checkbox-api"
+version = "0.0.1"
+description = "check processing api"
+authors = ["Pastor"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "3.12.3"
+fastapi = "0.115.0"
+asyncpg = "0.29.0"
+sqlmodel = "0.0.22"
+fastapi-utils = {extras = ["session"], version = "0.7.0"}
+mypy = "1.11.2"
+pylint = "3.3.0"
+pydantic-settings = "2.5.2"
+redis = "5.0.8"
+aioredis = "2.0.1"
+piccolo-api = "1.5.2"
+uvicorn = "^0.30.6"
+bcrypt = "^4.2.0"
+typing-inspect = "^0.9.0"
+pre-commit = "^3.8.0"
+
+[tool.ruff]
+line-length = 88
+select = [
+    "C",  # mccabe rules
+    "F",  # pyflakes rules
+    "E",  # pycodestyle error rules
+    "W",  # pycodestyle warning rules
+    "B",  # flake8-bugbear rules
+    "I",  # isort rules
+]
+ignore = [
+    "C901",  # max-complexity-10
+    "E501",  # line-too-long
+]
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "single
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
