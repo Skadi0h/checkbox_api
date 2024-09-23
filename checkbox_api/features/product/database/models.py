@@ -6,7 +6,6 @@ from sqlmodel import SQLModel, Field, Relationship
 
 class ProductCommon(SQLModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    receipt_id: uuid.UUID | None = None
     name: str = Field(
         max_length=128,
         index=True

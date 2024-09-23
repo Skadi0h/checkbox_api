@@ -1,7 +1,7 @@
 import bcrypt
 
 
-class PasswordManagementMixin:
+class PasswordHelper:
 
     @classmethod
     def create_hashed_password(cls, password: str) -> str:

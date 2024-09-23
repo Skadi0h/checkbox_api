@@ -37,8 +37,15 @@ class PostgreSQLConfig(BaseSettings):
             password=self.db_user_password,
             host=self.db_host,
             port=self.db_port,
-            
+            path=self.db_name
         )
+
+
+class JWTConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='JWT_')
+    secret_key: str = Field(default='secret')
+    algorithm: str = Field(default='HS256')
+    access_token_expire_minutes: int = Field(default=30)
 
 
 class ApplicationConfig(BaseSettings):
@@ -51,3 +58,4 @@ class ApplicationConfig(BaseSettings):
 
 POSTGRES_CONFIG = PostgreSQLConfig()
 APP_CONFIG = ApplicationConfig()
+JWT_CONFIG = JWTConfig()

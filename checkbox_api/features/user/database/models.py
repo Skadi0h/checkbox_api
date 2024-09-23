@@ -5,10 +5,7 @@ from sqlmodel import (
     Field, Relationship
 )
 
-from checkbox_api.mixins.password import PasswordManagementMixin
-
-
-class UserCommon(SQLModel, table=False):
+class UserCommon(SQLModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     first_name: str = Field(max_length=64)
     last_name: str = Field(max_length=64)
@@ -17,7 +14,6 @@ class UserCommon(SQLModel, table=False):
 
 class UserDB(
     UserCommon,
-    PasswordManagementMixin,
     table=True
 ):
     __tablename__ = 'users'

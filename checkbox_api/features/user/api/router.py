@@ -6,7 +6,7 @@ from fastapi_utils.cbv import cbv
 from checkbox_api.features.user.api.validation import UserCreate, UserOutput
 
 router = fastapi.APIRouter(
-    prefix='/api/v1/users'
+    prefix='/users'
 )
 
 
@@ -14,8 +14,8 @@ router = fastapi.APIRouter(
 class UserManagement:
     @router.post("/sign-in")
     def sign_in(
-            self,
-            *,
-            user: Annotated[UserCreate, fastapi.Body()]
+        self,
+        *,
+        user: Annotated[UserCreate, fastapi.Body()]
     ) -> UserOutput:
         ...

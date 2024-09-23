@@ -8,7 +8,7 @@ from checkbox_api.dependencies.logger import LoggerDependency
 from checkbox_api.features.product.dependencies import ProductControllerDependency
 from checkbox_api.features.receipt.database.controllers import ReceiptController
 from checkbox_api.features.receipt.handlers import ReceiptHandler
-from checkbox_api.features.user.dependencies import UserContextDependency
+from checkbox_api.features.user.dependencies import CurrentUserDependency
 
 
 async def _receipt_controller_dependency(
@@ -34,12 +34,12 @@ ReceiptControllerDependency = Annotated[
 
 async def _receipt_handler_dependency(
         *,
-        user_context: UserContextDependency,
+        user: CurrentUserDependency,
         receipt_controller: ReceiptControllerDependency,
         product_controller: ProductControllerDependency
 ) -> ReceiptHandler:
     return ReceiptHandler(
-        user_context=user_context,
+        user=user,
         receipt_controller=receipt_controller,
         product_controller=product_controller
     )

@@ -5,8 +5,7 @@ from typing import (
     Generic
 )
 
-from sqlalchemy import ColumnExpressionArgument
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import ColumnExpressionArgument, func
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSessionTransaction
 from sqlmodel import SQLModel, select
@@ -33,9 +32,11 @@ class LoggedSessionInstanceController(Generic[ModelTypeT]):
         async with self._db_session.begin() as transaction:
             try:
                 yield transaction
+                await transaction.commit()
             except SQLAlchemyError as error:
                 await transaction.rollback()
                 self._logger.exception(error)
+                raise error
             finally:
                 await self._db_session.close()
 
@@ -44,6 +45,17 @@ class ReadInstanceController(
     LoggedSessionInstanceController[ModelTypeT]
 ):
     __cls__: type[ModelTypeT]
+
+    async def exists(
+            self,
+            *,
+            filter_chain: tuple[ColumnExpressionArgument]
+    ) -> bool:
+        async with self._transaction():
+            result = await self._db_session.exec(
+                select(func.count(self.__cls__.id)).where(*filter_chain)
+            )
+            return result.one()
 
     async def read_one(
             self,
@@ -100,8 +112,10 @@ class CreateInstanceController(
             instances: Sequence[ModelTypeT]
     ) -> Sequence[ModelTypeT]:
         async with self._transaction():
-            results = await self._db_session.scalars(
-                insert(self.__cls__).returning(self.__cls__).values(instances)
+            self._db_session.add_all(
+                instances=instances
             )
             await self._db_session.flush()
-            return results.all()
+            for instance in instances:
+                await self._db_session.refresh(instance)
+            return instances

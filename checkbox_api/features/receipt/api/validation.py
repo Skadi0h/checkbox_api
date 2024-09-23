@@ -1,4 +1,5 @@
 import decimal
+import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, Field
@@ -6,7 +7,6 @@ from pydantic import BaseModel, Field
 from checkbox_api.features.product.database.models import ProductCommon
 from checkbox_api.features.product.validation import ProductCreate
 from checkbox_api.features.receipt.database.models import ReceiptCommon, PaymentTypes
-from checkbox_api.features.user.database.models import UserCommon
 
 
 class ReceiptCreate(ReceiptCommon):
@@ -14,7 +14,6 @@ class ReceiptCreate(ReceiptCommon):
 
 
 class ReceiptOutput(ReceiptCommon):
-    user: UserCommon
     products: list[ProductCommon]
 
 
@@ -24,3 +23,4 @@ class ReceiptFilters(BaseModel):
     min_amount: decimal.Decimal | None = Field(...)
     max_amount: decimal.Decimal | None = Field(...)
     payment_type: PaymentTypes = Field(...)
+    user_ids: list[uuid.UUID] = Field(...)

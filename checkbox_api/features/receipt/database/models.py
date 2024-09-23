@@ -4,6 +4,10 @@ import uuid
 
 from sqlmodel import SQLModel, Field, Relationship
 
+from checkbox_api.features.product.database.models import ProductDB
+from checkbox_api.features.proof.database.models import ProofDB
+from checkbox_api.features.user.database.models import UserDB
+
 
 class PaymentTypes(enum.StrEnum):
     CASH = enum.auto()
@@ -12,23 +16,19 @@ class PaymentTypes(enum.StrEnum):
 
 class ReceiptCommon(SQLModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: uuid.UUID = Field(...)
     payment_type: PaymentTypes = Field(...)
-    created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    created_at: int = Field(default_factory=datetime.datetime.timestamp)
 
 
 class ReceiptDB(ReceiptCommon, table=True):
     __tablename__ = 'receipts'
-
     user_id: uuid.UUID = Field(foreign_key='users.id')
-    proof_id: uuid.UUID = Field(foreign_key='proofs.id')
-
-    user: "UserDB" = Relationship(  # type: ignore[name-defined]
+    user: UserDB = Relationship(
         back_populates='receipts'
     )
-    proof: "ProofDB" = Relationship(  # type: ignore[name-defined]
-        back_populates='receipts'
+    proof: ProofDB = Relationship(
+        back_populates='receipt'
     )
-    products: list["ProductDB"] = Relationship(  # type: ignore[name-defined]
+    products: list[ProductDB] = Relationship(
         back_populates='receipt'
     )
